@@ -28,7 +28,7 @@ Expert guide for developing LINE Front-end Framework (LIFF) applications, includ
 To add these skills to your local environment, run:
 
 ```bash
-npx skills add yangnim21029/line-all-api
+npx skills add yangnim21029/line-api-dev
 ```
 
 ## Usage
