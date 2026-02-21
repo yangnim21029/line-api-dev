@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LIFF Starter</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    #status { margin-bottom: 20px; color: #555; }
+    #profile { border: 1px solid #ccc; padding: 10px; border-radius: 5px; display: none; }
+    #profile img { width: 100px; height: 100px; border-radius: 50%; }
+    .btn { display: inline-block; padding: 10px 20px; background: #06c755; color: white; text-decoration: none; border-radius: 5px; cursor: pointer; border: none; }
+  </style>
+</head>
+<body>
+  <h1>LIFF Starter</h1>
+  <div id="status">Initializing LIFF...</div>
+  <div id="profile">
+    <img id="pictureUrl" src="" alt="Profile Picture">
+    <h2 id="displayName"></h2>
+    <p id="userId"></p>
+    <p id="statusMessage"></p>
+    <button class="btn" id="sendMsg">Send Message</button>
+  </div>
+  <button class="btn" id="loginBtn" style="display: none;">Login</button>
+
+  <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
+  <script>
+    const statusDiv = document.getElementById('status');
+    const profileDiv = document.getElementById('profile');
+    const loginBtn = document.getElementById('loginBtn');
+
+    async function initLiff() {
+      try {
+        await liff.init({ liffId: 'YOUR_LIFF_ID' });
+        if (liff.isLoggedIn()) {
+          statusDiv.innerText = 'Logged in';
+          const profile = await liff.getProfile();
+          document.getElementById('displayName').innerText = profile.displayName;
+          document.getElementById('userId').innerText = 'User ID: ' + profile.userId;
+          document.getElementById('statusMessage').innerText = profile.statusMessage || '';
+          document.getElementById('pictureUrl').src = profile.pictureUrl;
+          profileDiv.style.display = 'block';
+        } else {
+          statusDiv.innerText = 'Not logged in';
+          loginBtn.style.display = 'block';
+          loginBtn.onclick = () => liff.login();
+        }
+      } catch (err) {
+        statusDiv.innerText = 'Error: ' + err.message;
+        console.error(err);
+      }
+    }
+
+    document.getElementById('sendMsg').onclick = async () => {
+      try {
+        await liff.sendMessages([{ type: 'text', text: 'Hello from LIFF!' }]);
+        alert('Message sent');
+      } catch (err) {
+        alert('Error: ' + err.message);
+      }
+    };
+
+    initLiff();
+  </script>
+</body>
+</html>
