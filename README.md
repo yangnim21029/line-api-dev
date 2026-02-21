@@ -9,11 +9,14 @@ Skills follow the [Agent Skills](https://skills.sh) format.
 ### line-platform
 Comprehensive guide and toolset for integrating with the LINE Platform, covering the Messaging API, LIFF, and LINE Login.
 
+### line-liff
+Expert guide for developing LINE Front-end Framework (LIFF) applications, including SDK integration, authentication, and advanced features like Share Target Picker.
+
 **Use when:**
-- Creating or managing a LINE chatbot (Messaging API)
-- Developing a LIFF (LINE Front-end Framework) web app
-- Implementing LINE Login for websites or mobile applications
-- Configuring settings in the LINE Developers Console
+- Building a web app that runs inside LINE
+- Getting user profiles or email addresses from a web page
+- Sending messages to LINE chats from a website
+- Implementing deep linking with LIFF URLs
 
 **Capabilities covered:**
 - **Messaging API**: Webhook signature verification, event handling, and complex message types (Flex, Templates).

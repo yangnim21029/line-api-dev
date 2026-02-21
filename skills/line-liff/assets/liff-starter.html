@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LIFF Starter App</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    .btn { display: block; width: 100%; padding: 10px; margin-bottom: 10px; background-color: #00c300; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    .info { background-color: #f0f0f0; padding: 10px; border-radius: 5px; margin-top: 20px; font-size: 0.9em; }
+  </style>
+</head>
+<body>
+  <h1>LIFF Starter</h1>
+  <div id="content">
+    <button class="btn" id="btn-login" style="display:none;">Login</button>
+    <button class="btn" id="btn-logout" style="display:none;">Logout</button>
+    <button class="btn" id="btn-profile">Get Profile</button>
+    <button class="btn" id="btn-share">Share Target Picker</button>
+    <button class="btn" id="btn-close">Close LIFF</button>
+  </div>
+  <div class="info" id="info">Initializing...</div>
+
+  <!-- LIFF SDK -->
+  <script src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
+  <script>
+    const info = document.getElementById('info');
+    const btnLogin = document.getElementById('btn-login');
+    const btnLogout = document.getElementById('btn-logout');
+
+    async function main() {
+      try {
+        await liff.init({ liffId: 'YOUR_LIFF_ID' });
+        info.innerText = 'LIFF Initialized';
+
+        if (!liff.isLoggedIn()) {
+          btnLogin.style.display = 'block';
+        } else {
+          btnLogout.style.display = 'block';
+        }
+
+        // Button Listeners
+        btnLogin.onclick = () => liff.login();
+        btnLogout.onclick = () => { liff.logout(); location.reload(); };
+        
+        document.getElementById('btn-profile').onclick = async () => {
+          if (!liff.isLoggedIn()) {
+            liff.login();
+            return;
+          }
+          const profile = await liff.getProfile();
+          alert(`Hello, ${profile.displayName}!`);
+        };
+
+        document.getElementById('btn-share').onclick = async () => {
+          if (liff.isApiAvailable('shareTargetPicker')) {
+            const result = await liff.shareTargetPicker([
+              { type: 'text', text: 'Sent from LIFF Starter!' }
+            ]);
+            if (result) alert('Message sent!');
+          } else {
+            alert('Share Target Picker not available');
+          }
+        };
+
+        document.getElementById('btn-close').onclick = () => {
+          liff.closeWindow();
+        };
+
+      } catch (err) {
+        info.innerText = `Error: ${err.message}`;
+        console.error(err);
+      }
+    }
+
+    main();
+  </script>
+</body>
+</html>
